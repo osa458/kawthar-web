@@ -5,6 +5,16 @@ import { slateEditor } from '@payloadcms/richtext-slate'
 import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
+import { Organizations } from './collections/Organizations'
+import { Events } from './collections/Events'
+import { Merchants } from './collections/Merchants'
+import { Products } from './collections/Products'
+import { Meetups } from './collections/Meetups'
+import { Coupons } from './collections/Coupons'
+import { Verifications } from './collections/Verifications'
+import { AbuseReports } from './collections/AbuseReports'
+import { Roles } from './collections/Roles'
+import { Recurrences } from './collections/Recurrences'
 
 export default buildConfig({
   admin: {
@@ -12,11 +22,28 @@ export default buildConfig({
     bundler: webpackBundler(),
   },
   editor: slateEditor({}),
-  collections: [Users],
+  collections: [
+    Users,
+    Organizations,
+    Events,
+    Merchants,
+    Products,
+    Meetups,
+    Coupons,
+    Verifications,
+    AbuseReports,
+    Roles,
+    Recurrences,
+  ],
   plugins: [
     s3Storage({
       collections: {
         'users': true,
+        'organizations': true,
+        'events': true,
+        'merchants': true,
+        'products': true,
+        'meetups': true,
       },
       bucket: process.env.S3_BUCKET || '',
       config: {
