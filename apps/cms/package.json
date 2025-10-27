@@ -2,28 +2,25 @@
   "name": "kawthar-cms",
   "version": "1.0.0",
   "description": "Kawthar Headless CMS - Payload CMS",
-  "main": "index.js",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "generate:types": "payload generate:types",
-    "generate:graphql": "payload generate:graphql",
-    "seed": "tsx seed.ts"
+    "start": "next start"
   },
-  "keywords": [
-    "cms",
-    "payload",
-    "headless",
-    "kawthar"
-  ],
-  "author": "Kawthar Team",
-  "license": "ISC",
   "dependencies": {
     "@payloadcms/db-postgres": "^3.61.1",
     "@payloadcms/next": "^3.61.1",
     "@payloadcms/richtext-lexical": "^3.61.1",
+    "next": "15.2.3",
     "payload": "^3.61.1",
-    "tsx": "^4.20.6"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
   }
 }
