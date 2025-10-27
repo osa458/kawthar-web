@@ -1,4 +1,4 @@
-import { CollectionConfig } from 'payload/types'
+import { CollectionConfig } from 'payload'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -15,7 +15,7 @@ export const Events: CollectionConfig = {
     },
     update: ({ req: { user } }) => {
       if (user) {
-        return ['admin', 'moderator'].includes(user.role) || 
+        return ['admin', 'moderator'].includes(user.role) ||
                (user.role === 'organizer' && user.organization === user.id)
       }
       return false

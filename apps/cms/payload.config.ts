@@ -1,6 +1,6 @@
 import { buildConfig } from 'payload'
-import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { slateEditor } from '@payloadcms/richtext-slate'
 
 import { Users } from './collections/Users'
@@ -14,14 +14,42 @@ import { Verifications } from './collections/Verifications'
 import { AbuseReports } from './collections/AbuseReports'
 import { Roles } from './collections/Roles'
 import { Recurrences } from './collections/Recurrences'
+import { Media } from './collections/Media'
+
+const bucket = process.env.S3_BUCKET || ''
+const endpoint = process.env.S3_ENDPOINT || ''
 
 export default buildConfig({
-  admin: {
-    user: Users.slug,
-    bundler: webpackBundler(),
+  serverURL: process.env.ADMIN_URL, // https://cms.kawthar.app
+  admin: { 
+    user: 'users' 
   },
   editor: slateEditor({}),
+  secret: process.env.PAYLOAD_SECRET!,
+  db: postgresAdapter({ 
+    pool: { 
+      connectionString: process.env.DATABASE_URL! 
+    } 
+  }),
+  plugins: [
+    s3Storage({
+      collections: {
+        media: true,
+      },
+      bucket,
+      config: {
+        endpoint,
+        region: 'us-east-1',
+        forcePathStyle: true,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+      },
+    }),
+  ],
   collections: [
+    Media,
     Users,
     Organizations,
     Events,
@@ -34,20 +62,15 @@ export default buildConfig({
     Roles,
     Recurrences,
   ],
-  db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URL,
-    },
-    push: true,
-  }),
-  serverURL: process.env.ADMIN_URL || 'http://localhost:3000',
-  secret: process.env.PAYLOAD_SECRET || '',
   cors: [
+    'http://localhost:3000',
+    'http://localhost:3001',
     'https://kawthar.app',
     'https://www.kawthar.app',
     'https://cms.kawthar.app',
   ],
   csrf: [
+    'http://localhost:3000',
     'https://kawthar.app',
     'https://www.kawthar.app',
     'https://cms.kawthar.app',

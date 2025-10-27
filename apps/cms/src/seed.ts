@@ -1,12 +1,15 @@
 import { getPayload } from 'payload'
-import config from '../payload.config'
+import config from '../payload.config.js'
 
 async function seed() {
   try {
     console.log('🌱 Starting seed...')
-    
-    const payload = await getPayload({ config })
-    
+
+    const payload = await getPayload({ 
+      config, 
+      secret: process.env.PAYLOAD_SECRET! 
+    })
+
     // Create admin user
     const adminUser = await payload.create({
       collection: 'users',
@@ -18,7 +21,7 @@ async function seed() {
       },
     })
     console.log('✅ Admin user created:', adminUser.email)
-    
+
     // Create sample organization
     const organization = await payload.create({
       collection: 'organizations',
@@ -39,7 +42,7 @@ async function seed() {
       },
     })
     console.log('✅ Organization created:', organization.name)
-    
+
     // Create sample events
     const events = [
       {
@@ -82,7 +85,7 @@ async function seed() {
         status: 'published',
       },
     ]
-    
+
     for (const eventData of events) {
       const event = await payload.create({
         collection: 'events',
@@ -90,11 +93,11 @@ async function seed() {
       })
       console.log('✅ Event created:', event.title)
     }
-    
+
     console.log('🎉 Seed completed successfully!')
     console.log('📧 Admin login: admin@kawthar.app')
     console.log('🔑 Admin password: admin123!')
-    
+
   } catch (error) {
     console.error('❌ Seed failed:', error)
     process.exit(1)
