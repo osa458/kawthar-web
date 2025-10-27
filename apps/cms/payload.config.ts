@@ -2,7 +2,6 @@ import { buildConfig } from 'payload'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { slateEditor } from '@payloadcms/richtext-slate'
-import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
 import { Organizations } from './collections/Organizations'
@@ -34,27 +33,6 @@ export default buildConfig({
     AbuseReports,
     Roles,
     Recurrences,
-  ],
-  plugins: [
-    s3Storage({
-      collections: {
-        'users': true,
-        'organizations': true,
-        'events': true,
-        'merchants': true,
-        'products': true,
-        'meetups': true,
-      },
-      bucket: process.env.S3_BUCKET || '',
-      config: {
-        credentials: {
-          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-        },
-        endpoint: process.env.S3_ENDPOINT,
-        region: 'nyc3',
-      },
-    }),
   ],
   db: postgresAdapter({
     pool: {
