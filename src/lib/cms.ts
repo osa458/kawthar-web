@@ -1,6 +1,6 @@
 // Frontend SDK for consuming Kawthar CMS API
-const CMS_BASE_URL = process.env.NEXT_PUBLIC_CMS_URL || 'https://cms.kawthar.app'
-const CMS_API_KEY = process.env.CMS_API_KEY
+const CMS_BASE_URL = process.env.CMS_BASE_URL || 'https://cms.kawthar.app'
+const CMS_API_KEY = process.env.CMS_API_TOKEN
 
 interface CMSResponse<T> {
   docs: T[]
@@ -84,7 +84,7 @@ class KawtharCMS {
   private baseURL: string
   private apiKey: string
 
-  constructor(baseURL: string = CMS_BASE_URL, apiKey: string = CMS_API_KEY) {
+  constructor(baseURL: string = CMS_BASE_URL, apiKey: string = CMS_API_KEY || '') {
     this.baseURL = baseURL
     this.apiKey = apiKey
   }
@@ -92,13 +92,13 @@ class KawtharCMS {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}/api/${endpoint}`
     
-    const headers = {
+    const headers: HeadersInit = {
       'Content-Type': 'application/json',
       ...options.headers,
     }
 
     if (this.apiKey) {
-      headers['Authorization'] = `Bearer ${this.apiKey}`
+      (headers as any)['Authorization'] = `Bearer ${this.apiKey}`
     }
 
     const response = await fetch(url, {

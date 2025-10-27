@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: MerchantDetailPageProps) {
     openGraph: {
       title: merchant.name,
       description: merchant.description,
-      images: [merchant.image],
+      images: [typeof merchant.image === 'string' ? merchant.image : merchant.image?.url || '/placeholder-merchant.jpg'],
     },
   };
 }
@@ -63,8 +63,8 @@ export default async function MerchantDetailPage({ params }: MerchantDetailPageP
             <Card>
               <div className="aspect-video bg-gray-200 rounded-t-lg overflow-hidden">
                 <img 
-                  src={merchant.image} 
-                  alt={merchant.name}
+                  src={typeof merchant.image === 'string' ? merchant.image : merchant.image?.url || '/placeholder-merchant.jpg'} 
+                  alt={typeof merchant.image === 'string' ? merchant.name : merchant.image?.alt || merchant.name}
                   className="w-full h-full object-cover"
                 />
                 {merchant.featured && (

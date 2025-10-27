@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: OrgDetailPageProps) {
     openGraph: {
       title: org.name,
       description: org.description,
-      images: [org.image],
+      images: [typeof org.image === 'string' ? org.image : org.image?.url || '/placeholder-org.jpg'],
     },
   };
 }
@@ -63,8 +63,8 @@ export default async function OrgDetailPage({ params }: OrgDetailPageProps) {
             <Card className="sticky top-8">
               <div className="aspect-square bg-gray-200 rounded-t-lg overflow-hidden">
                 <img 
-                  src={org.image} 
-                  alt={org.name}
+                  src={typeof org.image === 'string' ? org.image : org.image?.url || '/placeholder-org.jpg'} 
+                  alt={typeof org.image === 'string' ? org.name : org.image?.alt || org.name}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -90,9 +90,9 @@ export default async function OrgDetailPage({ params }: OrgDetailPageProps) {
           {/* Events Tabs */}
           <div className="lg:col-span-3">
             <OrgTabs
-              seasonal={org.seasonal}
-              recurring={org.recurring}
-              special={org.special}
+              seasonal={[]}
+              recurring={[]}
+              special={[]}
             />
           </div>
         </div>

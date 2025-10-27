@@ -15,8 +15,8 @@ export function MerchantCard({ merchant, className }: MerchantCardProps) {
     <Card className={`h-full hover:shadow-lg transition-shadow ${className}`}>
       <div className="aspect-video bg-gray-200 rounded-t-lg overflow-hidden">
         <img 
-          src={merchant.image} 
-          alt={merchant.name}
+          src={typeof merchant.image === 'string' ? merchant.image : merchant.image?.url || '/placeholder-merchant.jpg'} 
+          alt={typeof merchant.image === 'string' ? merchant.name : merchant.image?.alt || merchant.name}
           className="w-full h-full object-cover"
           loading="lazy"
         />

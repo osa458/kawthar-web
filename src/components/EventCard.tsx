@@ -16,8 +16,8 @@ export function EventCard({ event, className }: EventCardProps) {
       <Card className={`h-full hover:shadow-lg transition-shadow ${className}`}>
         <div className="aspect-video bg-gray-200 rounded-t-lg overflow-hidden">
           <img 
-            src={event.image} 
-            alt={event.title}
+            src={typeof event.image === 'string' ? event.image : event.image?.url || '/placeholder-event.jpg'} 
+            alt={typeof event.image === 'string' ? event.title : event.image?.alt || event.title}
             className="w-full h-full object-cover"
             loading="lazy"
           />

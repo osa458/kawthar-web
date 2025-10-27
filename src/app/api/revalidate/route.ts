@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: NextRequest) {
   const secret = process.env.REVALIDATE_SECRET;
@@ -12,22 +12,16 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { path, tag } = body;
+    const { path } = body;
 
     if (path) {
-      revalidatePath(path);
+      revalidatePath(path, 'page');
       console.log(`✅ Revalidated path: ${path}`);
-    }
-
-    if (tag) {
-      revalidateTag(tag);
-      console.log(`✅ Revalidated tag: ${tag}`);
     }
 
     return NextResponse.json({ 
       revalidated: true, 
-      path, 
-      tag,
+      path,
       timestamp: new Date().toISOString() 
     });
   } catch (error) {
