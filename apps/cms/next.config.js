@@ -1,7 +1,6 @@
-import { NextConfig } from 'next'
-import { withPayload } from '@payloadcms/next/withPayload'
+const { withPayload } = require('@payloadcms/next/withPayload')
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   experimental: {
     reactCompiler: false,
   },
@@ -19,4 +18,4 @@ const nextConfig: NextConfig = {
   },
 }
 
-export default withPayload(nextConfig)
+module.exports = withPayload(nextConfig)
