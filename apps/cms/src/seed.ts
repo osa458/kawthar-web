@@ -1,14 +1,11 @@
 import { getPayload } from 'payload'
-import config from '../payload.config.js'
+import config from '../payload.config'
 
 async function seed() {
   try {
     console.log('🌱 Starting seed...')
 
-    const payload = await getPayload({ 
-      config, 
-      secret: process.env.PAYLOAD_SECRET! 
-    })
+    const payload = await getPayload({ config })
 
     // Create admin user
     const adminUser = await payload.create({
