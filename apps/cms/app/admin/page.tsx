@@ -1,8 +1,6 @@
-import { getPayload } from 'payload'
-import config from '../../payload.config'
+import { getPayloadInstance } from '../../payload'
 
-const payload = await getPayload({ config })
-
-export default function AdminPage() {
+export default async function AdminPage() {
+  const payload = await getPayloadInstance()
   return payload.renderAdmin()
 }

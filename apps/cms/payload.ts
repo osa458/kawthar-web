@@ -1,6 +1,13 @@
 import { getPayload } from 'payload'
 import config from './payload.config'
 
-const payload = await getPayload({ config })
+let payload: any = null
 
-export default payload
+export const getPayloadInstance = async () => {
+  if (!payload) {
+    payload = await getPayload({ config })
+  }
+  return payload
+}
+
+export default getPayloadInstance

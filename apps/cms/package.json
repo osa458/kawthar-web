@@ -20,7 +20,8 @@
     "@payloadcms/storage-s3": "^1.0.0",
     "pg": "^8.11.0",
     "dotenv": "^16.3.0",
-    "express": "^4.18.0"
+    "express": "^4.18.0",
+    "sharp": "^0.33.0"
   },
   "devDependencies": {
     "@types/node": "^20",

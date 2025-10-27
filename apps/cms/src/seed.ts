@@ -1,11 +1,11 @@
 import { getPayload } from 'payload'
 import config from '../payload.config'
 
-const payload = await getPayload({ config })
-
 async function seed() {
   try {
     console.log('🌱 Starting seed...')
+    
+    const payload = await getPayload({ config })
     
     // Create admin user
     const adminUser = await payload.create({
