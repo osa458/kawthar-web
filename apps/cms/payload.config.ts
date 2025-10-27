@@ -64,4 +64,14 @@ export default buildConfig({
   }),
   serverURL: process.env.ADMIN_URL || 'http://localhost:3000',
   secret: process.env.PAYLOAD_SECRET || '',
+  cors: [
+    'https://kawthar.app',
+    'https://www.kawthar.app',
+    'https://cms.kawthar.app',
+  ],
+  csrf: [
+    'https://kawthar.app',
+    'https://www.kawthar.app',
+    'https://cms.kawthar.app',
+  ],
 })
