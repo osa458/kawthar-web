@@ -3,16 +3,13 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy package files
-COPY package*.json ./
+COPY package.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm install --production
 
 # Copy source code
 COPY . .
-
-# Generate Payload types
-RUN npm run generate:types
 
 # Build the application
 RUN npm run build
