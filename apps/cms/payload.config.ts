@@ -6,11 +6,16 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'default-secret-change-in-production',
   admin: {
     user: 'users',
+    meta: {
+      titleSuffix: '- Kawthar CMS',
+      favicon: '/favicon.ico',
+    },
   },
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL,
     },
+    push: true, // This will create tables automatically
   }),
   editor: lexicalEditor({}),
   collections: [

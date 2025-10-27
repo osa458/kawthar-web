@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "init": "tsx init.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.61.1",
@@ -21,6 +22,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }
