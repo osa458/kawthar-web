@@ -1,5 +1,4 @@
 import { buildConfig } from 'payload'
-import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -7,12 +6,6 @@ import path from 'path'
 export default buildConfig({
   admin: {
     user: 'users',
-    bundler: webpackBundler(),
-    meta: {
-      titleSuffix: '- Kawthar CMS',
-      favicon: '/favicon.ico',
-      ogImage: '/og-image.jpg',
-    },
   },
   editor: lexicalEditor({}),
   collections: [
