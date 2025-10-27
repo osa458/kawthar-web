@@ -11,6 +11,8 @@ const nextConfig = {
     }
     return config
   },
+  // Use pages directory instead of app directory
+  pageExtensions: ['tsx', 'ts', 'jsx', 'js'],
 }
 
 module.exports = nextConfig

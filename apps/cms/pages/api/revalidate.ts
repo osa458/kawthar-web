@@ -1,23 +1,26 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextApiRequest, NextApiResponse } from 'next'
 import { revalidatePath, revalidateTag } from 'next/cache'
 
-export async function POST(request: NextRequest) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' })
+  }
+
   try {
     // Verify the secret header
-    const authHeader = request.headers.get('authorization')
+    const authHeader = req.headers.authorization
     const expectedSecret = process.env.REVALIDATE_SECRET
     
     if (!authHeader || !expectedSecret) {
-      return NextResponse.json({ error: 'Missing authorization' }, { status: 401 })
+      return res.status(401).json({ error: 'Missing authorization' })
     }
     
     const token = authHeader.replace('Bearer ', '')
     if (token !== expectedSecret) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+      return res.status(401).json({ error: 'Invalid token' })
     }
     
-    const body = await request.json()
-    const { type, id, path, tag } = body
+    const { type, id, path, tag } = req.body
     
     // Revalidate based on type
     if (path) {
@@ -51,7 +54,7 @@ export async function POST(request: NextRequest) {
       }
     }
     
-    return NextResponse.json({ 
+    res.json({ 
       revalidated: true, 
       type, 
       id,
@@ -60,6 +63,6 @@ export async function POST(request: NextRequest) {
     
   } catch (error) {
     console.error('Revalidation error:', error)
-    return NextResponse.json({ error: 'Revalidation failed' }, { status: 500 })
+    res.status(500).json({ error: 'Revalidation failed' })
   }
 }
