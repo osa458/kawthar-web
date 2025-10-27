@@ -2,6 +2,14 @@ import pool from './db'
 
 export async function initDatabase() {
   try {
+    console.log('🔌 Attempting to connect to database...')
+    console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'Not set')
+    
+    // Test connection first
+    const client = await pool.connect()
+    console.log('✅ Database connection successful')
+    client.release()
+
     // Create users table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
