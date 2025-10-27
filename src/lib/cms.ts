@@ -1,5 +1,5 @@
 // Frontend SDK for consuming Kawthar CMS API
-const CMS_BASE_URL = process.env.CMS_BASE_URL || 'https://cms.kawthar.app'
+const CMS_BASE_URL = process.env.CMS_BASE_URL || 'https://sea-lion-app-5wqrx.ondigitalocean.app'
 const CMS_API_KEY = process.env.CMS_API_TOKEN
 
 interface CMSResponse<T> {

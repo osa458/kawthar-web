@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import pool from '../../../lib/db'
+import bcrypt from 'bcryptjs'
 
 export async function GET() {
   try {
@@ -13,15 +14,21 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, name, role = 'user' } = await request.json()
+    const { email, name, password, role = 'user' } = await request.json()
     
     if (!email || !name) {
       return NextResponse.json({ error: 'Email and name are required' }, { status: 400 })
     }
 
+    // Hash password if provided
+    let hashedPassword = null
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 12)
+    }
+
     const result = await pool.query(
-      'INSERT INTO users (email, name, role) VALUES ($1, $2, $3) RETURNING *',
-      [email, name, role]
+      'INSERT INTO users (email, name, password, role) VALUES ($1, $2, $3, $4) RETURNING id, email, name, role, created_at',
+      [email, name, hashedPassword, role]
     )
 
     return NextResponse.json({ user: result.rows[0] }, { status: 201 })

@@ -9,28 +9,21 @@ function createSlug(name: string): string {
     .replace(/(^-|-$)/g, '')
 }
 
-// Helper function to format merchant for Payload CMS API
-function formatMerchantForPayload(merchant: any) {
+// Helper function to format organization for Payload CMS API
+function formatOrganizationForPayload(organization: any) {
   return {
-    id: merchant.id.toString(),
-    name: merchant.name,
-    slug: merchant.slug || createSlug(merchant.name),
-    description: merchant.description || '',
-    category: merchant.category || 'General',
-    neighborhood: merchant.neighborhood || 'Downtown',
-    image: merchant.image_url ? {
-      url: merchant.image_url,
-      alt: merchant.name
+    id: organization.id.toString(),
+    name: organization.name,
+    slug: organization.slug || createSlug(organization.name),
+    description: organization.description || '',
+    image: organization.image_url ? {
+      url: organization.image_url,
+      alt: organization.name
     } : undefined,
-    rating: merchant.rating || 0,
-    reviewCount: merchant.review_count || 0,
-    hours: merchant.hours || 'Mon-Fri 9AM-6PM',
-    phone: merchant.phone || '',
-    website: merchant.website || '',
-    featured: merchant.featured || false,
-    published: merchant.status === 'published',
-    createdAt: merchant.created_at,
-    updatedAt: merchant.updated_at
+    website: organization.website || '',
+    published: organization.status === 'published',
+    createdAt: organization.created_at,
+    updatedAt: organization.updated_at
   }
 }
 
@@ -57,18 +50,6 @@ export async function GET(request: NextRequest) {
           queryParams.push(whereObj.published.equals ? 'published' : 'draft')
         }
         
-        if (whereObj.neighborhood?.equals) {
-          paramCount++
-          whereClause += ` AND neighborhood = $${paramCount}`
-          queryParams.push(whereObj.neighborhood.equals)
-        }
-        
-        if (whereObj.category?.equals) {
-          paramCount++
-          whereClause += ` AND category = $${paramCount}`
-          queryParams.push(whereObj.category.equals)
-        }
-        
         if (whereObj.slug?.equals) {
           paramCount++
           whereClause += ` AND slug = $${paramCount}`
@@ -90,10 +71,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Get total count
-    const countResult = await pool.query(`SELECT COUNT(*) FROM merchants ${whereClause}`, queryParams)
+    const countResult = await pool.query(`SELECT COUNT(*) FROM organizations ${whereClause}`, queryParams)
     const totalDocs = parseInt(countResult.rows[0].count)
 
-    // Get merchants with pagination
+    // Get organizations with pagination
     const offset = (page - 1) * limit
     paramCount++
     whereClause += ` LIMIT $${paramCount}`
@@ -104,11 +85,11 @@ export async function GET(request: NextRequest) {
     queryParams.push(offset)
 
     const result = await pool.query(
-      `SELECT * FROM merchants ${whereClause} ${orderClause}`,
+      `SELECT * FROM organizations ${whereClause} ${orderClause}`,
       queryParams
     )
 
-    const docs = result.rows.map(formatMerchantForPayload)
+    const docs = result.rows.map(formatOrganizationForPayload)
     const totalPages = Math.ceil(totalDocs / limit)
 
     return NextResponse.json({
@@ -124,14 +105,14 @@ export async function GET(request: NextRequest) {
       nextPage: page < totalPages ? page + 1 : null
     })
   } catch (error) {
-    console.error('Error fetching merchants:', error)
-    return NextResponse.json({ error: 'Failed to fetch merchants' }, { status: 500 })
+    console.error('Error fetching organizations:', error)
+    return NextResponse.json({ error: 'Failed to fetch organizations' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, description, category, neighborhood, image_url, website, rating, review_count, hours, phone, featured, status = 'draft' } = await request.json()
+    const { name, description, image_url, website, status = 'draft' } = await request.json()
     
     if (!name) {
       return NextResponse.json({ error: 'Name is required' }, { status: 400 })
@@ -139,13 +120,13 @@ export async function POST(request: NextRequest) {
 
     const slug = createSlug(name)
     const result = await pool.query(
-      'INSERT INTO merchants (name, slug, description, category, neighborhood, image_url, website, rating, review_count, hours, phone, featured, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *',
-      [name, slug, description, category, neighborhood, image_url, website, rating, review_count, hours, phone, featured, status]
+      'INSERT INTO organizations (name, slug, description, image_url, website, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [name, slug, description, image_url, website, status]
     )
 
-    return NextResponse.json({ merchant: formatMerchantForPayload(result.rows[0]) }, { status: 201 })
+    return NextResponse.json({ organization: formatOrganizationForPayload(result.rows[0]) }, { status: 201 })
   } catch (error) {
-    console.error('Error creating merchant:', error)
-    return NextResponse.json({ error: 'Failed to create merchant' }, { status: 500 })
+    console.error('Error creating organization:', error)
+    return NextResponse.json({ error: 'Failed to create organization' }, { status: 500 })
   }
 }
