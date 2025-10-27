@@ -17,5 +17,5 @@ RUN npm run build
 # Expose port
 EXPOSE 3000
 
-# Start the application with initialization
-CMD ["./start.sh"]
+# Start the application
+CMD ["npm", "start"]
