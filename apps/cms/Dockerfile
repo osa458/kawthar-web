@@ -18,4 +18,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the application with initialization
-CMD ["sh", "-c", "npm run init && npm start"]
+CMD ["./start.sh"]
