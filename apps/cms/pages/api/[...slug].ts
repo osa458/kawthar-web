@@ -1,5 +1,5 @@
 import { getPayload } from 'payload'
-import config from './payload.config'
+import config from '../../payload.config'
 
 export default async function handler(req: any, res: any) {
   const payload = await getPayload({ config })

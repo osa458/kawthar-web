@@ -1,6 +1,6 @@
 import { buildConfig } from 'payload'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
-import { postgresAdapter } from '@payloadcms/db-postgresql'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import { s3Storage } from '@payloadcms/storage-s3'
 
